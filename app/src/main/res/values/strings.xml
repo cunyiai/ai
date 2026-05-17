@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">村医AI</string>
+    <string name="app_title">村医AI</string>
+    <string name="welcome_title">欢迎使用村医AI</string>
+    <string name="welcome_desc">AI 建议仅供参考，不能替代医生诊断。如有不适，请及时就医。</string>
+    <string name="suggestion_1">请描述图片中的内容。</string>
+    <string name="suggestion_2">Describe the image.</string>
+    <string name="model_management">模型管理</string>
+    <string name="status_uninitialized">未初始化 - 请下载或加载模型</string>
+    <string name="status_initializing">正在初始化...</string>
+    <string name="status_initialized">已初始化 - 请加载模型</string>
+    <string name="status_loading">正在加载模型...</string>
+    <string name="status_ready">模型就绪</string>
+    <string name="status_generating">正在生成回复...</string>
+    <string name="status_downloading">正在下载模型...</string>
+    <string name="hint_server">服务器地址 (如 192.168.1.100:8888)</string>
+    <string name="download">下载模型</string>
+    <string name="load_model">加载模型</string>
+    <string name="hint_input">发消息</string>
+    <string name="add_image">添加图片</string>
+    <string name="take_photo">拍照</string>
+    <string name="send">发送</string>
+    <string name="stop_generating">终止生成</string>
+    <string name="image_desc">图片</string>
+    <string name="disclaimer">AI 建议仅供参考，不能替代医生诊断。如有不适，请及时就医。</string>
+    <string name="clear_chat">清空对话</string>
+    <string name="clear_chat_confirm">确定要清空对话吗？</string>
+    <string name="clear_chat_toast">对话已清空</string>
+
+    <!-- Image slicing settings (chat-page popup) -->
+    <string name="image_slice_settings">图片切片数</string>
+    <string name="image_slice_dialog_title">图片切片数</string>
+    <string name="image_slice_label_min">1\n极速</string>
+    <string name="image_slice_label_max">9\n最清晰</string>
+    <string name="image_slice_hint">切片越多，模型能识别的图片细节越清晰；同时图像 token 更多，回答耗时也越长。\n• 1：单张概览（最快，无切图）\n• 9：MiniCPM-V 模型上限（默认，最清晰）</string>
+    <string name="image_slice_apply_toast">图片切片数已切换为 %1$d</string>
+    <string name="image_slice_pending_toast">已保存切片数 %1$d，下次加载模型时生效</string>
+</resources>
