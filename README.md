@@ -1,158 +1,94 @@
-# MiniCPM-V Demo — iOS, Android & HarmonyOS
+# 🩺 村医AI — 基于 MiniCPM-V 的离线多模态医疗助手
 
-**English** | [中文](README_zh.md)
+> MiniCPM-V 视觉语言模型 Android 端部署，支持离线图像理解、文字对话与摄像头实时分析。
 
-This demo runs the MiniCPM-V family of multimodal models fully on-device on iOS, Android, and HarmonyOS NEXT. Three model versions are currently supported:
+## ✨ 功能特性
 
-* **MiniCPM-V 2.6**
-* **MiniCPM-V 4.0**
-* **MiniCPM-V 4.6**
+- **🖼️ 图像理解** — 上传图片进行 AI 分析识别
+- **📷 摄像头拍照** — 直接拍照分析，无需从相册选取
+- **💬 智能对话** — 基于多模态模型的文字对话能力
+- **🔌 完全离线** — 所有推理在设备本地运行，无需网络
+- **🩺 医疗辅助** — 专为基层医疗场景优化
 
-This repository contains three on-device demos for MiniCPM-V (multimodal LLM) running fully locally via `llama.cpp`:
+## 📱 支持的模型
 
-* `MiniCPM-V-demo/` — iOS demo (Xcode project)
-* `MiniCPM-V-demo-Android/` — Android demo (Gradle / Kotlin)
-* `MiniCPM-V-demo-HarmonyOS/` — HarmonyOS NEXT demo (DevEco Studio / ArkTS)
+| 模型 | 参数量 | 推荐量化 | 模型文件大小 | 推荐设备内存 |
+| --- | --- | --- | --- | --- |
+| MiniCPM-V 2.6 | 80亿 | Q4_K_M | ~5.4 GB | ≥ 8 GB |
+| MiniCPM-V 4.0 | 41亿 | Q4_K_M | ~2.9 GB | ≥ 6 GB |
+| MiniCPM-V 4.6 | 13亿 | Q4_K_M | ~1.6 GB | ≥ 6 GB |
 
-All three demos share the same `llama.cpp` submodule (branch `Support-iOS-Demo`) at the repo root.
+## 🛠️ 环境要求
 
-> **NOTE**: This project bundles `llama.cpp` as a git submodule. After cloning, run:
->
-> ```bash
-> git clone https://github.com/OpenBMB/MiniCPM-V-Apps.git
-> cd MiniCPM-V-Apps
-> git submodule update --init --recursive
-> ```
+- **Android Studio** (Giraffe 或更新版本)
+- **Android SDK + NDK** (NDK 28.2 / CMake 3.22.1)
+- **物理设备**: 64位 ARM 处理器 (`arm64-v8a`)
+- **设备内存**: 见上表，推荐 8GB+
 
-The README is organised in two parts:
+## 🚀 快速安装
 
-* **Part 1 — Platform setup**: how to build and run the demo on iOS, Android and HarmonyOS.
-* **Part 2 — GGUF model files**: where to get the model weights for each MiniCPM-V version, and the minimum on-device hardware needed to run them.
+### 方式一：直接安装 APK
 
----
+下载预构建的 `app-debug.apk`（18MB），传输到 Android 设备后直接安装。
 
-> **Just want to install the app?** Pre-built TestFlight (iOS) / APK (Android) / HAP (HarmonyOS) packages and step-by-step install instructions are in **[DOWNLOAD.md](DOWNLOAD.md)**. The rest of this README is only needed if you want to build from source.
+> ⚠️ 需要开启「允许未知来源」安装权限。
 
----
-
-## Part 1. Platform Setup
-
-### 1.1 iOS Demo
-
-**NOTE: To deploy and test the app on an iOS device, you may need an Apple Developer account.**
-
-Install Xcode:
-
-* Download Xcode from the App Store
-* Install the Command Line Tools:
-
-  ```bash
-  xcode-select --install
-  ```
-* Agree to the software license agreement:
-
-  ```bash
-  sudo xcodebuild -license
-  ```
-
-Open `MiniCPM-V-demo/MiniCPM-V-demo.xcodeproj` with Xcode. It may take a moment for Xcode to automatically download the required dependencies.
-
-In Xcode, select the target device at the top of the window, then click the "Run" (triangle) button to launch the demo.
-
-**NOTE: If you encounter errors related to the `thirdparty/llama.xcframework` path, please follow the steps below to build the `llama.xcframework` manually.**
-
-#### Manually Building the llama.xcframework
-
-Build directly inside the submodule (no extra clone needed):
-
-```bash
-cd llama.cpp
-./build-xcframework.sh
-cp -r ./build-apple/llama.xcframework ../MiniCPM-V-demo/thirdparty
-```
-
-### 1.2 Android Demo
-
-Requirements:
-
-* Android Studio (Giraffe or newer)
-* Android SDK + NDK (the project pins NDK `28.2.13676358` and CMake `3.22.1`)
-* A physical device with a 64-bit ARM SoC (`arm64-v8a`)
-* Device RAM: see the per-model requirements in [Part 2](#part-2-gguf-model-files)
-
-Build & run:
+### 方式二：从源码构建
 
 ```bash
 cd MiniCPM-V-demo-Android
 ./gradlew assembleDebug
 ```
 
-Or open `MiniCPM-V-demo-Android/` directly in Android Studio and click Run.
+构建产物位于 `app/build/outputs/apk/debug/app-debug.apk`。
 
-The first launch will download the GGUF model files into the app's external storage. You can also sideload model files manually via `adb push` — see in-app **Model Manager** for the expected directory layout.
+## 📖 使用说明
 
-### 1.3 HarmonyOS Demo
+1. **安装应用** — 安装 APK 到 Android 设备
+2. **下载模型** — 首次打开应用，通过「模型管理」下载 GGUF 模型文件
+3. **开始使用**:
+   - 点击 📷 按钮拍照分析
+   - 点击 🖼️ 按钮从相册选取图片
+   - 输入文字进行对话
 
-Requirements:
+## 📂 模型文件下载
 
-* DevEco Studio 5.0 or newer (with the HarmonyOS Native SDK / NDK)
-* A real device or emulator running HarmonyOS API 12+ (e.g. nova 14 vitality / Mate 60 / Pura 70)
-* 64-bit ARM architecture (`arm64-v8a`)
-* Device RAM: see the per-model requirements in [Part 2](#part-2-gguf-model-files)
+推荐从 ModelScope 下载（国内访问更快）：
 
-Build & run:
+- **MiniCPM-V 2.6**: [ModelScope](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf)
+- **MiniCPM-V 4.0**: [ModelScope](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf)
+- **MiniCPM-V 4.6**: [ModelScope](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf)
 
-1. Open `MiniCPM-V-demo-HarmonyOS/` in DevEco Studio.
-2. `File` → `Project Structure` → `Signing Configs` and tick **Automatically generate signature** (requires a Huawei developer account; this only needs to be done once).
-3. Connect the device with USB debugging enabled, then click Run (the green triangle).
+需要下载两个文件：
+- 语言模型文件（如 `ggml-model-Q4_K_M.gguf`）
+- 视觉投影文件（`mmproj-model-f16.gguf`）
 
-After the first launch, open the in-app **Model Manager** and tap **Download**. You can also sideload model files via `hdc file send`; see `MiniCPM-V-demo-HarmonyOS/README_zh.md` for the expected directory layout.
+也可通过 HuggingFace 下载：[MiniCPM-V-2.6](https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf) | [MiniCPM-V-4.0](https://huggingface.co/openbmb/MiniCPM-V-4-gguf) | [MiniCPM-V-4.6](https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf)
 
-> The HarmonyOS port shares the exact same `llama.cpp` submodule, model catalogue, OBS direct-link URLs and MD5 hashes with the iOS / Android demos.
+## 🏗️ 项目结构
+
+```
+MiniCPM-V-demo-Android/
+├── app/
+│   ├── src/main/
+│   │   ├── java/.../         # Kotlin 源码
+│   │   ├── cpp/              # JNI / CMake 原生代码
+│   │   └── res/              # 资源文件（布局、图标等）
+│   └── build.gradle.kts      # 应用构建配置
+├── gradle/                   # Gradle 配置
+├── build.gradle.kts          # 项目构建配置
+└── settings.gradle.kts       # 项目设置
+```
+
+## 📝 版本历史
+
+- **v2.1** — 新增摄像头拍照功能、🩺听诊器图标、修复构建配置
+- **v2.0** — AI 辅助诊疗助手基础版本
+
+## 📄 许可证
+
+本项目基于 [MiniCPM-V](https://github.com/OpenBMB/MiniCPM-V) 开源项目构建。
 
 ---
 
-## Part 2. GGUF Model Files
-
-### Hardware requirements
-
-The on-device memory needed to run a model is roughly *(model file size) + KV cache + a few hundred MB of working memory for the vision encoder and llama.cpp internals*. The recommended values below leave enough headroom for the OS and the demo app itself.
-
-| Model | LLM params | Recommended quant | LLM file (Q4) | mmproj (f16) | Total download | Recommended device RAM |
-| --- | --- | --- | --- | --- | --- | --- |
-| MiniCPM-V 2.6 | 8B | Q4_K_M | ~4.4 GB | ~1.0 GB | ~5.4 GB | **≥ 8 GB** |
-| MiniCPM-V 4.0 | 4.1B | Q4_K_M | ~2.0 GB | ~0.9 GB | ~2.9 GB | **≥ 6 GB** |
-| MiniCPM-V 4.6 | 1.3B | Q4_K_M | ~0.5 GB | ~1.1 GB | ~1.6 GB | **≥ 6 GB** |
-
-Notes:
-
-* `mmproj` is the vision projector + ViT weights; it is shipped in **f16** because quantising the visual tower hurts perception quality noticeably more than quantising the LLM.
-* All three demos default to a context window of 4K tokens. Larger contexts will increase the KV-cache footprint roughly linearly, so on a borderline device you may need to lower it.
-* On Android / HarmonyOS, devices with 8 GB+ RAM are strongly recommended for V 2.6. On iOS, V 2.6 has been validated on iPhone 15 Pro / 16 series and recent iPads with M-series chips; older 6 GB devices may swap heavily.
-
-### 2.1 MiniCPM-V 2.6 GGUF Files
-
-#### Download Official GGUF Files
-
-* HuggingFace: [https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf](https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf)
-* ModelScope: [https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf)
-
-Download the language model file (e.g., `ggml-model-Q4_0.gguf`) and the vision model file (`mmproj-model-f16.gguf`) from the repository.
-
-### 2.2 MiniCPM-V 4.0 GGUF Files
-
-#### Download Official GGUF Files
-
-* HuggingFace: [https://huggingface.co/openbmb/MiniCPM-V-4-gguf](https://huggingface.co/openbmb/MiniCPM-V-4-gguf)
-* ModelScope: [https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf)
-
-Download the language model file (e.g., `ggml-model-Q4_K_M.gguf`) and the vision model file (`mmproj-model-f16.gguf`) from the repository.
-
-### 2.3 MiniCPM-V 4.6 GGUF Files
-
-#### Download Official GGUF Files
-
-* HuggingFace: [https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf](https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf)
-* ModelScope: [https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf)
-
-Download the language model file (e.g., `MiniCPM-V-4_6-Q4_K_M.gguf`) and the vision model file (`mmproj-model-f16.gguf`) from the repository.
+> 🇨🇳 **村医AI** — 让基层医疗更智能
